@@ -17,17 +17,21 @@ app.setBg("white")
 app.setFont(18)
 
 # add & configure widgets - widgets get a name, to help referencing them later
-app.addLabel("title", "Welcome to appJar")
+app.addLabel("title", "Data visualization")
 app.setLabelBg("title", "white")
 app.setLabelFg("title", "black")
 
 app.addTextArea("Data")
+app.setTextAreaHeight("Data", 10)
 
 # link the buttons to the function called press
 app.addButtons(["Submit", "Cancel"], press)
 
-app.addGoogleMap("m1")
-app.setGoogleMapSize("m1", "300x500")
+
+canvas = app.addCanvas("c1")
+canvas.create_rectangle(1000, 0, 1316, 208)
+
+app.setSize("Fullscreen")
 
 # start the GUI
 app.go()
