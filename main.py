@@ -9,7 +9,6 @@ from ev3dev2.port import LegoPort
 
 from ev3dev2.sound import Sound
 
-
 # EV3 Display
 lcd = Display()
 
@@ -32,11 +31,11 @@ while not touchsensor.value():
     lcd.clear()
     # Request block
     print("data: " + str(data))
+    if len(data) >= 1:
+        break
     bus.write_i2c_block_data(address, 0, data)
     # Read block
     block = bus.read_i2c_block_data(address, 0, 20)
-
-    print(str(block))
     # Extract data
     sig = block[7] * 256 + block[6]
     x = block[9] * 256 + block[8]
