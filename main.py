@@ -9,6 +9,11 @@ from ev3dev2.port import LegoPort
 
 from ev3dev2.sound import Sound
 
+
+def checkIfThereIsOnlyOneElement(arr):
+    return arr[0] == arr[len(arr) - 1]
+
+
 # EV3 Display
 lcd = Display()
 
@@ -24,18 +29,22 @@ sleep(0.5)
 bus = SMBus(3)
 address = 0x54
 
-data = [174, 193, 32, 2, 1, 255]
+data = [174, 193, 32, 2, 255, 255]
 
 while not touchsensor.value():
     # Clear display
     lcd.clear()
     # Request block
     print("data: " + str(data))
-    if len(data) >= 1:
-        break
     bus.write_i2c_block_data(address, 0, data)
     # Read block
-    block = bus.read_i2c_block_data(address, 0, 20)
+    block = bus.read_i2c_block_data(address, 0, 6+14)
+    print(str(block))
+    for index in range(2):
+        block2 = bus.read_i2c_block_data(address, 0, 14)
+        print("Following block: " + str(block2))
+
+    break
     # Extract data
     sig = block[7] * 256 + block[6]
     x = block[9] * 256 + block[8]
