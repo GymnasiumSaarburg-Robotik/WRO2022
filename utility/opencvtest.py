@@ -3,7 +3,7 @@ import numpy as np
 
 
 while True:
-    img = cv2.imread('image4.png')
+    img = cv2.imread('unrecognizedBalls.png')
     frame = img
 
     # Locate points of the documents
