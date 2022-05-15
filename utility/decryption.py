@@ -10,8 +10,8 @@ for block in blocksAsStringList:
     if first:
         block = block.replace("175, 193, 33, 42, 82, 7, ", "")
     block = block.replace("1, 0, ", "", 1)
-    print(str(block))
     blockAsStringList = block.split(",")
     blockAsStringList = blockAsStringList[:-4]
-    print(blockAsStringList)
+    data = [int(x) for x in blockAsStringList]
+    print(data)
     first = False
