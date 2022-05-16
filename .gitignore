@@ -1,4 +1,7 @@
 __pycache__/
 *.pyc
 .venv/
-.idea/vcs.xml
+
+# IDE intern files
+.idea/
+*.iml
