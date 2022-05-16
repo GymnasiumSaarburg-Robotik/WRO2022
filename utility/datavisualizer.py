@@ -11,7 +11,7 @@ def press(button):
             data = app.getTextArea("Data")
             data = re.findall('\[(.*?)\]', data)
             first = True
-            for block in data:
+            for index, block in enumerate(data):
                 if first:
                     block = block.replace("175, 193, 33, 42, 82, 7, ", "")
                 block = block.replace("1, 0, ", "", 1)
@@ -44,6 +44,7 @@ def press(button):
                         x_center + int(width / 2),
                         y_center + int(height / 2)
                     )
+                    c1.create_text(x_center, y_center, text=str(index))
         except:
             app.errorBox("Fehler", "Daten invalide. Kopf entfernen")
 
