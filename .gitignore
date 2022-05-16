@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 .venv/
-.idea/vcs.xml
-.idea/pixyTest.iml
-.idea/misc.xml
+
+# IDE intern files
+.idea/
+*.iml
