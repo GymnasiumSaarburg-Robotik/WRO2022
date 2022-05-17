@@ -2,48 +2,33 @@
 
 As described in the pixy porting guide the data from the Pixy BUS packet response can be interpreted after the following scheme
 
-Example Data:
-`[175, 193, 33, 14, 139, 2, 1, 0, 128, 0, 78, 0, 48, 0, 40, 0, 0, 0, 101, 255]`<br>
-
-`[175, 193, 33, 28, 170, 5, 1, 0, 82, 0, 186, 0, 40, 0, 37, 0, 0, 0, 40, 255]
-Following block: [1, 0, 160, 0, 185, 0, 40, 0, 36, 0, 0, 0, 132, 255]
-`
-
+Example data:
 `[175, 193, 33, 42, 82, 7, 1, 0, 252, 0, 191, 0, 36, 0, 29, 0, 0, 0, 2, 255]
 [1, 0, 118, 0, 165, 0, 28, 0, 24, 0, 0, 0, 3, 255]
-[1, 0, 6, 0, 22, 0, 12, 0, 18, 0, 0, 0, 200, 255]
-`
+[1, 0, 6, 0, 22, 0, 12, 0, 18, 0, 0, 0, 200, 255]`
 
-`
-[175, 193, 33, 56, 74, 5
-21, 1, 195, 0, 38, 0, 22, 0, 0, 0, 17, 255]
-14, 0, 22, 0, 28, 0, 21, 0, 0, 0, 18, 255, 
-47, 1, 16, 0][26, 0, 20, 0, 0, 0, 117, 48, 
-8, 0, 6, 0, 16, 0, 3, 0, 0, 0][135, 0
-Valid: False
+Blocks are converted into absolute directions using two important constants:
+#### CameraWidth
+#### EnemyDirection / OffsetAngle
 
-`
+Both constants can be pretty easily understood by using the following grahic:
+<img src="https://i.imgur.com/gJ5SAAw.png">
 
-Response head:
-`[175, 193, 33, 14, checksum x 2, colorcode x 2]`
+As seen:
+The Camera width describes the maximum range of absolute directions the camera captures.
+The offsetAngle describes the offset the cam is orientated to the enemy team.
 
-Hier: `[175, 193, 33, 14, 139, 2, 1, 0]`
+With these constants you can determine the direction a ball is positioned in by using its
+position on the x-Axis `x`, the x-Maximum of the cam `xMax`, the cameraWidth `camWdth` and the offsetAngle `offsAngle`
 
-Remaining: `[128, 0, 78, 0, 48, 0, 40, 0, 0, 0, 101, 255]`
+Absolute direction:
+`offsAngle + ((x / xMax) * camWdth)`
 
-0 0-1  x-center | 0-315
-Hier: `[128, 0]`
-
-1 2-3  y-center | 0-207
-Hier: `[78, 0]`
-
-2 4-5  width / x | 0-316
-Hier: `[48, 0]`
-
-3 6-7  height / y | 0-208
-Hier: `[40, 0]`
-
-
-Remaining:
-`[0, 0, 101, 255]`
-`[Angle x 2, Tracking index, Age]`
+Potential risks:
+###Risk of surpassing 359°
+Example:\
+offsAngle = 200°\
+x = 1750\
+xMax = 2000\
+camWdth = 250°\
+-> Direction would be 418,75°. If 359° is surpassed, an additional - 359° offset has to be added. 
