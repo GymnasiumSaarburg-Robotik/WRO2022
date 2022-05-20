@@ -5,16 +5,17 @@ from decryption.block import CCblock
 
 class direction_data:
 
-    CONST_CAMERA_DIRECTION_WIDTH = 120  # TODO: Measure direction width
-
     def __init__(self, raw_data, current_direction):
+        self.CONST_CAMERA_DIRECTION_WIDTH = 120  # TODO: Measure direction width
+        self.CONST_CAMERA_PIXEL_WIDTH = 319  # Camera image is 319px
+
         self.rawData = raw_data
         self.blocks = []
         self.blockDirections = []
         self.current_direction = current_direction
-        self.decrypt_data()
+        self.decrypt_data(current_direction)
 
-    def decrypt_data(self):
+    def decrypt_data(self, offset_direction):
         try:
             data = self.rawData
             data = re.findall('\[(.*?)\]', data)
@@ -44,7 +45,12 @@ class direction_data:
                     width = summed_data[base_index - 1]
                     height = summed_data[base_index]
 
-                    block_object = CCblock(int(x_center), int(y_center), int(width * height), 0)
+                    direction = x_center / self.CONST_CAMERA_PIXEL_WIDTH * self.CONST_CAMERA_DIRECTION_WIDTH
+                    direction -= offset_direction
+                    if direction >= 359:
+                        direction -= direction
+                    print("Direction: " + str(direction))
+                    block_object = CCblock(int(x_center), int(y_center), int(width * height), direction)
                     self.blocks.append(block_object)
         except True:  # Catch any exception
             print("Data could not be resolved.")
