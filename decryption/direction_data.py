@@ -6,7 +6,7 @@ from decryption.block import CCblock
 class direction_data:
 
     def __init__(self, raw_data, current_direction):
-        self.CONST_CAMERA_DIRECTION_WIDTH = 120  # TODO: Measure direction width
+        self.CONST_CAMERA_DIRECTION_WIDTH = 60
         self.CONST_CAMERA_PIXEL_WIDTH = 319  # Camera image is 319px
 
         self.rawData = raw_data
