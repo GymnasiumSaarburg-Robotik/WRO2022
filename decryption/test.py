@@ -1,5 +1,18 @@
-from decryption.direction_data import direction_data
+from decryption.api import direction_data_new
 
-data = direction_data("[175, 193, 33, 42, 82, 7, 1, 0, 252, 0, 191, 0, 36, 0, 29, 0, 0, 0, 2, 255]"
-                      "[1, 0, 118, 0, 165, 0, 28, 0, 24, 0, 0, 0, 3, 255]"
-                      "[1, 0, 6, 0, 22, 0, 12, 0, 18, 0, 0, 0, 200, 255]", 10)
+data = [1, 1, 0, 24, 1, 88, 0, 28, 0, 23]
+summed_data = []
+
+num_hash = 0
+for i in range(len(data)):
+    if i % 2 != 0:
+        if data[i] == 1:
+            num_hash += 255
+        else:
+            num_hash += data[i]
+        summed_data.append(num_hash)
+        num_hash = 0
+    else:
+        num_hash += data[i]
+
+print(summed_data)

@@ -11,7 +11,7 @@ from ev3dev2.sensor import *
 from ev3dev2.port import LegoPort
 from ev3dev2.motor import *
 
-from decryption.api2 import direction_data_new
+from decryption.api import *
 
 from time import *
 
@@ -26,10 +26,6 @@ num = c.value()
 print(num)
 
 
-def only_contains_one_element(data):
-    return len(set(data)) == 1
-
-
 def readBlocks(address, bus, current_direction):
     # FIXME: Upper part should be constant
 
@@ -40,14 +36,10 @@ def readBlocks(address, bus, current_direction):
     # Read first block
     data = ""
     block = bus.read_i2c_block_data(address, 0, 6 + 14)
-    if not only_contains_one_element(block[7:]):
-        data += str(block)
-    while True:  # TODO: Add max iterations
+    data += str(block)
+    for index in range(0):  # TODO: Detect how many balls are found, currently hard coded to two
         block2 = bus.read_i2c_block_data(address, 0, 14)
-        if only_contains_one_element(block2):
-            break
-        data += "|\n" + str(block2)
-
+        data += str(block2)
     print(data)
     return direction_data_new(data, current_direction)
 
@@ -60,35 +52,20 @@ sleep(0.5)
 bus = SMBus(3)
 address = 0x54
 
-readBlocks(address, bus, 0)
-
-motor1 = MediumMotor(OUTPUT_A)
-motor2 = MediumMotor(OUTPUT_C)
 
 while True:
     direction_data = readBlocks(address, bus, c.value())
-    directions = direction_data.blockDirectionDiffs
-    directions = [round(num, 0) for num in directions]
+    directions = direction_data.blockDirections
+    print("\n\n\n")
+    print(str(directions))
+    directions = [int(round(num, 0)) for num in directions]
+    print(str(directions))
 
-    if len(directions) == 0:
-        motor1.off()
-        motor2.off()
-        continue
 
     targetDirection = directions[0]
 
-    if 10 > targetDirection > -10:
-        motor1.on(-50, False, False)
-        motor2.on(50, False, False)
-        sleep(10)
-        motor1.on(50, False, False)
-        motor2.on(-50, False, False)
-        sleep(10)
-        continue
+    display.text_grid("Ball: " + str(directions[0]), True, 10, 3)
+    display.text_grid("Kompass: " + str(c.value()), False, 10, 6)
 
-    if targetDirection > 0:
-        motor1.on((targetDirection / 90) * -30, False, False)
-        motor2.on((targetDirection / 90) * -30, False, False)
-    else:
-        motor1.on((targetDirection / 90) * -30, False, False)
-        motor2.on((targetDirection / 90) * -30, False, False)
+    display.update()
+    sleep(1)
