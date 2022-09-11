@@ -11,7 +11,7 @@ class direction_data_new:
 
         self.rawData = raw_data
         self.blocks = []
-        self.blockDirections = []
+        self.blockDirectionDiffs = []
         self.current_direction = current_direction
         self.decrypt_data(current_direction)
 
@@ -24,17 +24,23 @@ class direction_data_new:
                 block = block.replace("1, 0, ", "", 1)
                 block_as_string_list = block.split(",")
                 if first:
-                    block_as_string_list = block_as_string_list[5:]
+                    block_as_string_list = block_as_string_list[6:]
                     first = False
                 block_as_string_list = block_as_string_list[:-4]
                 data = [int(x) for x in block_as_string_list]
                 summed_data = []
                 num_hash = 0
+
                 for i in range(len(data)):
-                    num_hash += data[i]
                     if i % 2 != 0:
+                        if data[i] == 1:
+                            num_hash += 255
+                        else:
+                            num_hash += data[i]
                         summed_data.append(num_hash)
                         num_hash = 0
+                    else:
+                        num_hash += data[i]
 
                 for i in range(1, int(len(summed_data) / 4) + 1):
                     base_index = i * 4 - 1
@@ -46,27 +52,17 @@ class direction_data_new:
 
                     # Relative Position im Bild [<0.5; 0.5; >0.5]
                     relative_direction = x_center / self.CONST_CAMERA_PIXEL_WIDTH
-                    direction = current_direction
+                    direction_offset = 0
                     if relative_direction > 0.5:
                         relative_direction -= 0.5
                         direction_offset = relative_direction * self.CONST_CAMERA_DIRECTION_WIDTH
-                        direction += direction_offset
-                        print(direction_offset)
                     elif relative_direction < 0.5:
                         relative_direction = 0.5 - relative_direction
-                        direction_offset = relative_direction * self.CONST_CAMERA_DIRECTION_WIDTH
-                        direction -= direction_offset
-                        print(direction_offset)
+                        direction_offset = -1 * relative_direction * self.CONST_CAMERA_DIRECTION_WIDTH
 
-                    if direction >= 359:
-                        direction -= 359
-                    if direction < 0:
-                        direction += 359
-                    print("Direction: " + str(direction))
-                    block_object = CCblock(int(x_center), int(y_center), int(width * height), direction)
+                    block_object = CCblock(int(x_center), int(y_center), int(width * height), direction_offset)
                     self.blocks.append(block_object)
-                    self.blockDirections.append(direction)
+                    self.blockDirectionDiffs.append(direction_offset)
         except True:  # Catch any exception
             print("Data could not be resolved.")
             return
-        print("Generated direction data containing " + str(len(self.blocks)) + " blocks.")

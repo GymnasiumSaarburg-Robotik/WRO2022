@@ -5,3 +5,5 @@ __pycache__/
 # IDE intern files
 .idea/
 *.iml
+.idea/misc.xml
+.idea/pixyTest.iml
