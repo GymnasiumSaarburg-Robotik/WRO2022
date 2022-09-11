@@ -6,18 +6,8 @@ from decryption.block import CCblock
 
 class basic_movement:
 
-    def __init__(self):
-
-        self.constants = constants()
-
-        self.CONST_CAMERA_DIRECTION_WIDTH = 65  # Einstellen bezüglich Drehung
-        self.CONST_CAMERA_PIXEL_WIDTH = 315  # Camera image is 319px
-
-        self.rawData = raw_data
-        self.blocks = []
-        self.blockDirectionDiffs = []
-        self.current_direction = current_direction
-        self.decrypt_data(current_direction)
+    def __init__(self, constants_instance):
+        self.constants = constants_instance
 
     def move_towards_sleeping_pos1(self, current_direction):
         pass

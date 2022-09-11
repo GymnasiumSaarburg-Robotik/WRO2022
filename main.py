@@ -11,13 +11,7 @@ from decryption.api import direction_data_new
 from time import *
 
 from constants.constants import constants
-
-c = constants()
-
-display = Display()
-
-c.GYRO_SENSOR.reset()
-print("init: " + str(c.GYRO_SENSOR.angle))
+from basic_movement.api import basic_movement
 
 
 def face_ramp():
@@ -89,6 +83,11 @@ def readBlocks(current_direction):
     return direction_data_new(data, current_direction)
 
 
+c = constants()
+bm = basic_movement(c)
+
+c.GYRO_SENSOR.reset()
+print("init: " + str(c.GYRO_SENSOR.angle))
 chasingBall = False
 
 while True:
