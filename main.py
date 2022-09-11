@@ -91,37 +91,25 @@ print("init: " + str(c.GYRO_SENSOR.angle))
 chasingBall = False
 
 while True:
+
+    # New approach: No direct line, rather alignment on two seperate dimensions
+
     direction_data = readBlocks(c.GYRO_SENSOR.value())
-    directions = direction_data.blockDirectionDiffs
-    print("Count:" + str(len(directions)))
-    directions = [round(num, 0) for num in directions]
+    relative_positions_raw = direction_data.relativeDirections
+    print("Count:" + str(len(relative_positions_raw)))
+    relative_positions = [round(num, 0) for num in relative_positions_raw]
+    # values between 0 and 1; < 0.5 left hand side; > 0.5 right
+    rel = relative_positions[0]
 
-    if len(directions) == 0:
-        if chasingBall:
-            c.DRIVING_MOTOR_LEFT.on_for_seconds(20, 3, True, False)
-            c.DRIVING_MOTOR_RIGHT.on_for_seconds(20, 3, True, False)
-            sleep(1)
-            c.SECURING_MOTOR.on_for_seconds(-15, 0.5, False, False)
-            sleep(1)
-            c.SECURING_MOTOR.off()
-            face_ramp()
-            shoot()
-            break
-        else:
-            c.DRIVING_MOTOR_LEFT.off()
-            c.DRIVING_MOTOR_RIGHT.off()
-        continue
+    if rel > 0.5:
+        pass
+        # Turn, drive abs(rel)/0.5 * MAX_DISTANCE
+    else:
+        pass
+        # Turn other direction, drive ''
 
-    targetDirection = directions[0]
-
-    if 5 > targetDirection > -5:
-        c.DRIVING_MOTOR_LEFT.on(40, False, False)
-        c.DRIVING_MOTOR_RIGHT.on(40, False, False)
-        chasingBall = True
-        continue
-
-    c.DRIVING_MOTOR_LEFT.on((targetDirection / 90) * 50, False, False)
-    c.DRIVING_MOTOR_RIGHT.on((targetDirection / 90) * -50, False, False)
+    # face_ramp
+    # drive an estimated distance
 
 print("Done")
 sleep(30)

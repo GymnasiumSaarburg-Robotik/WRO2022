@@ -12,6 +12,7 @@ class direction_data_new:
         self.rawData = raw_data
         self.blocks = []
         self.blockDirectionDiffs = []
+        self.relativeDirections = []
         self.current_direction = current_direction
         self.decrypt_data(current_direction)
 
@@ -52,6 +53,7 @@ class direction_data_new:
 
                     # Relative Position im Bild [<0.5; 0.5; >0.5]
                     relative_direction = x_center / self.CONST_CAMERA_PIXEL_WIDTH
+                    self.relativeDirections.append(relative_direction)
                     direction_offset = 0
                     if relative_direction > 0.5:
                         relative_direction -= 0.5
