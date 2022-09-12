@@ -27,8 +27,8 @@ def face_ramp():
         else:
             c.DRIVING_MOTOR_LEFT.on(-10)
             c.DRIVING_MOTOR_RIGHT.on(10)
-    c.DRIVING_MOTOR_LEFT.off()
-    c.DRIVING_MOTOR_RIGHT.off()
+    c.DRIVING_MOTOR_LEFT.off(False)
+    c.DRIVING_MOTOR_RIGHT.off(False)
 
 
 def only_contains_one_element(data):
@@ -58,7 +58,7 @@ def shoot():
             c.DRIVING_MOTOR_RIGHT.on(speed=50)
     c.DRIVING_MOTOR_LEFT.off()
     c.DRIVING_MOTOR_RIGHT.off()
-    c.SECURING_MOTOR.on_for_seconds(50, 2, False, True)
+    c.SECURING_MOTOR.on_for_seconds(100, 1, False, True)
     c.SHOOTING_MOTOR.on_for_seconds(100, 0.5, False, True)
 
 

@@ -14,8 +14,10 @@ class constants:
         self.SECURING_MOTOR = MediumMotor(OUTPUT_A)
         self.SHOOTING_MOTOR = MediumMotor(OUTPUT_D)
 
+        self.PRESSURE_SENSOR = TouchSensor(INPUT_4)
         self.GYRO_SENSOR = GyroSensor(INPUT_3)
-        self.COLOR_SENSOR = ColorSensor(INPUT_4)
+        self.GYRO_SENSOR.calibrate()
+        self.COLOR_SENSOR = ColorSensor(INPUT_2)
 
         self.CAMERA_ADDRESS = 0x54
         input1 = LegoPort(INPUT_1)
