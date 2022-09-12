@@ -36,13 +36,13 @@ def readBlocks(current_direction):
 c = constants()
 bm = basic_movement(c)
 
-c.GYRO_SENSOR.reset()
-print("init: " + str(c.GYRO_SENSOR.angle))
-chasingBall = False
+#c.GYRO_SENSOR.reset()
+#print("init: " + str(c.GYRO_SENSOR.angle))
+#chasingBall = False
 
 # New approach: No direct line, rather alignment on two seperate dimensions
 
-direction_data = readBlocks(c.GYRO_SENSOR.value())
+direction_data = readBlocks(0)
 relative_positions_raw = direction_data.relativeDirections
 print("Count:" + str(len(relative_positions_raw)))
 
